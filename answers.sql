@@ -1,48 +1,41 @@
 -- Question 1
-ALTER table ProductDetail
-DROP COLUMN Products;
-
-CREATE TABLE Products (
-id SMALLINT PRIMARY KEY AUTO_INCREMENT, 
-Product VARCHAR (50),
+CREATE DATABASE normalization;
+use normalization;
+CREATE TABLE ProductDetail(
 OrderID INT,
-FOREIGN KEY(OrderID) REFERENCES ProductDetail (OrderID)
-);
+CustomerName VARCHAR(100),
+Products VARCHAR(100));
 
-INSERT INTO Products (Product, OrderID)
-VALUES ("Laptop", 101),
-("Mouse", 101),
-("Tablet", 102),
-("Keyboard", 102),
-("Mouse", 102),
-("Phone", 103);
+INSERT INTO ProductDetail(OrderID, CustomerName, Products)
+VALUES (101, 'John Doe', 'Laptop'),
+(101, 'John Doe', 'Mouse'),
+(102, 'Jane Smith', 'Tablet'),
+(102, 'Jane Smith', 'Keyboard'),
+(101, 'Jane Smith', 'Mouse'),
+(101, 'Emily Clark', 'Phone');
 
 -- Question 2
-DROP TABLE Products;
-CREATE TABLE Products (
-id SMALLINT PRIMARY KEY AUTO_INCREMENT, 
-Product VARCHAR (50)
-);
+CREATE TABLE Orders(
+OrderID INT PRIMARY KEY,
+CustomerName VARCHAR(100));
 
-INSERT INTO Products (Product)
-VALUES ("Laptop"),
-("Mouse"),
-("Tablet"),
-("Keyboard"),
-("Mouse"),
-("Phone");
+INSERT INTO Orders (OrderID, CustomerName)
+VALUES (101, 'John Doe'),
+(102, 'Jane Smith'),
+(103, 'Emily Clark');
 
-CREATE TABLE OrderDetails (
-id SMALLINT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE Product (
 OrderID INT,
-Details_Id SMALLINT,
+Product VARCHAR (100),
 Quantity INT,
-FOREIGN KEY (Details_Id) REFERENCES Products (id),
-FOREIGN KEY (OrderID) REFERENCES ProductDetail (OrderID)
-);
+PRIMARY KEY (OrderID, Product),
+FOREIGN KEY(OrderID) REFERENCES Orders(OrderID));
 
-INSERT INTO OrderDetails (OrderID, Details_Id, Quantity)
-VALUES (101, 1, 2),
-(102, 2, 3),
-(103, 3, 2),
-(102, 4, 5);
+INSERT INTO Product (OrderID, Product, Quantity)
+VALUES (101, 'Laptop', 2),
+(101, 'Mouse', 1),
+(102, 'Tablet', 3),
+(102, 'Keyboard', 1),
+(102, 'Mouse', 2),
+(103, 'Phone', 1);
+
